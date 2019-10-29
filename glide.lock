@@ -1,0 +1,41 @@
+hash: f8949e849c2049041235cba524f0eefdd4dd81a5542bd6b8d0493d4fa05daa5c
+updated: 2019-10-29T17:37:49.158099Z
+imports:
+- name: github.com/golang/mock
+  version: 9fa652df1129bef0e734c9cf9bf6dbae9ef3b9fa
+  subpackages:
+  - gomock
+- name: github.com/graphql-go/graphql
+  version: 5fa0612dc4df52a24d62abd7dfd0bd92ec45ba5c
+  subpackages:
+  - gqlerrors
+  - language/ast
+  - language/kinds
+  - language/lexer
+  - language/location
+  - language/parser
+  - language/printer
+  - language/source
+  - language/typeInfo
+  - language/visitor
+- name: github.com/graphql-go/handler
+  version: c1267356e6539d975e83bbea383c2bbb861dce5b
+testImports:
+- name: github.com/gopherjs/gopherjs
+  version: d3ddacdb130fcd23f77a827e3b599804730be6b5
+  subpackages:
+  - js
+- name: github.com/jtolds/gls
+  version: b4936e06046bbecbb94cae9c18127ebe510a2cb9
+- name: github.com/smartystreets/assertions
+  version: 8df9578143a50c65c2675d8e3207386ca9375d31
+  subpackages:
+  - internal/go-diff/diffmatchpatch
+  - internal/go-render/render
+  - internal/oglematchers
+- name: github.com/smartystreets/goconvey
+  version: 9e8dc3f972df6c8fcc0375ef492c24d0bb204857
+  subpackages:
+  - convey
+  - convey/gotest
+  - convey/reporting

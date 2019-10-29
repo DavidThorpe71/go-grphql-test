@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/graphql-go/graphql"
@@ -42,7 +42,7 @@ var articleType = graphql.NewObject(
 		Name: "Article",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.ID,
 			},
 			"ambientVideo": &graphql.Field{
 				Type: graphql.String,
@@ -58,6 +58,35 @@ var articleType = graphql.NewObject(
 			},
 			"businessUnit": &graphql.Field{
 				Type: graphql.String,
+			},
+			"bodyCards": &graphql.Field{
+				Type: graphql.NewList(cardType),
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					// article := p.Source
+					article, ok := p.Source.(interface{})
+					if ok {
+						return article, nil
+					}
+					// for _, item := range article.Card
+					return nil, nil
+				},
+			},
+		},
+	},
+)
+
+var cardType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Card",
+		Fields: graphql.Fields{
+			"name": {
+				Type: graphql.String,
+			},
+			"cardType": {
+				Type: graphql.String,
+			},
+			"article": {
+				Type: graphql.ID,
 			},
 		},
 	},
@@ -95,6 +124,19 @@ var authorType = graphql.NewObject(
 	},
 )
 
+func getArticleByIdResolver(p graphql.ResolveParams) (interface{}, error) {
+	id, ok := p.Args["id"].(string)
+	if ok {
+		// Find product
+		for _, article := range articles {
+			if article.ID == id {
+				return article, nil
+			}
+		}
+	}
+	return nil, nil
+}
+
 var queryType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Query",
@@ -110,41 +152,29 @@ var queryType = graphql.NewObject(
 						Type: graphql.String,
 					},
 				},
+				Resolve: getArticleByIdResolver,
+			},
+			"getAllArticles": &graphql.Field{
+				Type:        graphql.NewList(articleType),
+				Description: "Get all articles in database",
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					id, ok := p.Args["id"].(string)
-					if ok {
-						// Find product
-						for _, article := range articles {
-							if article.ID == id {
-								return article, nil
-							}
-						}
-					}
-					return nil, nil
+					return articles, nil
 				},
 			},
 		},
 	},
 )
 
-var schema, _ = graphql.NewSchema(
-	graphql.SchemaConfig{
-		Query: queryType,
-	},
-)
-
-func executeQuery(query string, schema graphql.Schema) *graphql.Result {
-	result := graphql.Do(graphql.Params{
-		Schema:        schema,
-		RequestString: query,
-	})
-	if len(result.Errors) > 0 {
-		fmt.Printf("errors: %v", result.Errors)
-	}
-	return result
-}
-
 func main() {
+	schema, err := graphql.NewSchema(
+		graphql.SchemaConfig{
+			Query: queryType,
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	h := handler.New(&handler.Config{
 		Schema:     &schema,
 		Pretty:     true,
