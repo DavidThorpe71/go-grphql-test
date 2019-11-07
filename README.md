@@ -11,4 +11,5 @@ Run `go run main.go`
 ### Test
 
 On PC run `%GOPATH%/bin/goconvey`
+
 On Mac run `$GOPATH/bin/goconvey`
