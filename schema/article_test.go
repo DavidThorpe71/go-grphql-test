@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/graphql-go/graphql"
@@ -55,5 +56,26 @@ func TestArticleResolver(t *testing.T) {
 			}
 
 		}
+
+		Convey(`No field found`, func() {
+			mockResolveParams := graphql.ResolveParams{
+				Source: Article{
+					Title:       "test title",
+					Description: "test description",
+					RelatedArticles: []Article{
+						{
+							Title:       "test related article title",
+							Description: "test related article description",
+						},
+					},
+				},
+				Info: graphql.ResolveInfo{
+					FieldName: "fakeField",
+				},
+			}
+			_, have := ArticleResolver(mockResolveParams)
+			want := errors.New(`No field with name fakeField`)
+			So(have, ShouldResemble, want)
+		})
 	})
 }
