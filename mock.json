@@ -1,0 +1,14 @@
+{
+  "title": "Cricket article",
+  "description": "Cricket world cup is over",
+  "relatedArticles": [
+    {
+      "title": "Football Article",
+      "description": "Tootenham versus man utd"
+    },
+    {
+      "title": "Golf article",
+      "description": "Tiger woods wins golf champoinship"
+    }
+  ]
+}
