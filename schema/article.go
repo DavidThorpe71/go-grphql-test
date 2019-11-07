@@ -45,7 +45,7 @@ func ArticleResolver(p graphql.ResolveParams) (interface{}, error) {
 		case "title":
 			return data.Title, nil
 		case "description":
-			return data.Title, nil
+			return data.Description, nil
 		case "relatedArticles":
 			return data.RelatedArticles, nil
 		default:
